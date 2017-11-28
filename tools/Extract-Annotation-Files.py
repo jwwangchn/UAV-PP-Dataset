@@ -9,6 +9,8 @@ scenePath = "H:/Data/UAV/UAV-PP-V1.0.1-Beta"
 annotationPath = "H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations"
 dstPath = "H:/Data/UAV/UAV-PP-V1.0.1-Beta/Annotations"
 
+noAnnotationImage = open("./No-Annotation-Image.txt", "w", encoding='utf-8') # 存储没有 Annotation 的图像文件
+
 # 2. 提取图片路径下的目录
 sceneList = os.listdir(scenePath)
 annotationList = os.listdir(annotationPath)
@@ -34,8 +36,13 @@ for sceneName in sceneList:
         annotationName = (annotationPath + '/' + imageName).replace(".jpg","") + ".xml"
         # newAnnotationSceneName = (newAnnotationScenePath + '/' + imageName).replace(".jpg", "") + ".xml"
         print("copy: ", newAnnotationScenePath, "to", annotationName)
+
         if os.path.exists(annotationName):
             shutil.copy(annotationName, newAnnotationScenePath)
+        else:
+            noAnnotationImage.write(annotationName + "\n")
 
+noAnnotationImage.close()
+    
 
 

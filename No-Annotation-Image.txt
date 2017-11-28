@@ -1,0 +1,102 @@
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A15.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A16.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A191.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A389.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A57.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A6.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropD104.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A141.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A149.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A152.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A157.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A167.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A171.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A174.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A182.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A254.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A297.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A375.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A41.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A435.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A442.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A444.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A449.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A461.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A71.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A77.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A88.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropJ25.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A181.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropC79 - 副本.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropC82 - 副本.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropC83 - 副本.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropD327.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropH80.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropH98.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k121.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k122.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k123.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k124.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k125.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k126.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k127.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k128.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k129.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k130.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k131.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k132.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k133.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k134.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k135.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k136.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k137.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k138.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k139.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k140.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k141.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k142.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k143.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k144.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k145.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k146.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k147.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k148.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k149.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k150.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k151.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k152.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k153.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k154.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k155.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k156.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k157.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k158.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k159.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k160.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k161.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k162.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k163.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_k164.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_A335.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropA14.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropA21.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropA29.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropA9.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropB10.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropB13.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropB15.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropB7.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/DJI_cropB9.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/1 低矮灌木丛.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/10 操场.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/11 人工建筑物.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/2 高大密林.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/3 草地.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/4 水边.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/5 水中.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/6 山崖.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/7 雪地.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/8 争议图像.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/9 路上和路边.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/Annotations.xml
+H:/Data/UAV/UAV-GV1-0-1 大量修改 无效/Annotations/RAW.xml
