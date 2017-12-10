@@ -1,4 +1,4 @@
-function matlab_to_xml(mylabel, generated_path)
+function matlab_to_xml(mylabel, folder_name)
 % 功能： 把trainingImageLabel APP数据格式(table类型)转为VOC格式的xml
 % 输入： mylabel为导出到工作空间的标注文件, generated_path为存储Annotation的文件夹,
 % 默认存储到当前路径下的xmlSaveFolder文件夹
@@ -8,17 +8,9 @@ function matlab_to_xml(mylabel, generated_path)
 % Example:
 %          matlab_to_xml(mylabel)
 %
-
-%% 输入参数合理性判断
+%%
 if nargin<1 || ~istable(mylabel)
-    error('输入参数太少或者类型错误！请用trainingImageLabel APP导出的table类型数据！')
-end
-
-if nargin == 1
-    if ~exist('xmlSaveFolder','file')
-        mkdir xmlSaveFolder
-    end
-    generated_path = 'xmlSaveFolder/'
+    error('请导入trainingImageLabel APP文件的table数据！');
 end
 
 %%
@@ -26,10 +18,9 @@ tableLabel = mylabel; %这里是自己的标注好的table类型数据
 variableNames = tableLabel.Properties.VariableNames; %cell类型
 numSamples = size(mylabel,1);
 numVariables = size(variableNames,2);
-
+steps = numSamples;
 %%
 for i = 1:numSamples
-    
     rowTable = tableLabel(i,:);
     imageFullPathName = rowTable.(variableNames{1});%cell
     path = char(imageFullPathName);
@@ -39,14 +30,7 @@ for i = 1:numSamples
     annotation.folder = pathstr(index(end)+1:end);
     annotation.filename = [name,ext];
     annotation.path = path;
-    
-    fprintf('Generating %s.xml, %d/%d, %f%% \n', name, i, numSamples, i/numSamples*100);
-    
-    % source
     annotation.source.database = 'UAV-PP-V2.0.0';
-    annotation.source.annotation = 'PASCAL VOC2007';
-    annotation.source.flickrid = 'NULL';
-    
     image = imread(annotation.path);
     
     annotation.size.width = size(image,2);
@@ -56,23 +40,61 @@ for i = 1:numSamples
     
     objectnum = 0;
     for j = 2:numVariables %对于每个变量
-        ROI_matrix = rowTable.(variableNames{j});%cell
-        ROI_matrix = ROI_matrix{:};
+        ROI_matrix = rowTable.(variableNames{j} );%cell
+        if iscell(ROI_matrix)
+            ROI_matrix = cell2mat(ROI_matrix);
+        end
         numROIS = size(ROI_matrix,1);
         for ii = 1: numROIS % 对于每个ROI
-            %             field = ['object',num2str(ii)];
             objectnum= objectnum+1;
             annotation.object(objectnum).name = variableNames{1,j};
-            annotation.object(objectnum).pose = 'Front';
+            annotation.object(objectnum).pose = 'Unspecified';
             annotation.object(objectnum).truncated = 0;
             annotation.object(objectnum).difficult= 0;
             annotation.object(objectnum).bndbox.xmin = ROI_matrix(ii,1);
             annotation.object(objectnum).bndbox.ymin = ROI_matrix(ii,2);
-            annotation.object(objectnum).bndbox.xmax = ROI_matrix(ii,1)+ROI_matrix(ii,3)-1;
-            annotation.object(objectnum).bndbox.ymax = ROI_matrix(ii,2)+ROI_matrix(ii,4)-1;
+            annotation.object(objectnum).bndbox.xmax = ROI_matrix(ii,1)+ROI_matrix(ii,3) - 1;
+            annotation.object(objectnum).bndbox.ymax = ROI_matrix(ii,2)+ROI_matrix(ii,4) - 1;
         end
     end
-    xml_write([generated_path, '\', name,'.xml'],annotation);
+    
+    filename = fullfile(folder_name,[name,'_temp.xml']);
+    xml_write(filename,annotation);
+    
+    %% 整理
+    fid_r = fopen(filename,'r');
+    fid_w = fopen(fullfile(folder_name,[name,'.xml']),'w');
+    fgetl(fid_r);
+    flagOffset = 0;flagObjects = 0;
+    while(~feof(fid_r))
+        tline = fgetl(fid_r);
+        if contains(tline,'<object>')||contains(tline,'</object>')
+            t_next_line = fgetl(fid_r);
+            if contains(t_next_line,'<item>')
+                flagOffset = mod(flagOffset+1,2);
+                flagObjects = 1;
+                newStr = strrep(t_next_line,'item','object');
+                fprintf(fid_w,'%s\r\n',newStr(4:end));
+                continue;
+            end
+            if ~flagObjects
+                fprintf(fid_w,'%s\r\n',tline);
+                fprintf(fid_w,'%s\r\n',t_next_line);
+            else % 多个objects
+                fprintf(fid_w,'%s\r\n',t_next_line);
+            end
+        elseif contains(tline,'<item>')||contains(tline,'</item>')
+            newStr = strrep(tline,'item','object');
+            fprintf(fid_w,'%s\r\n',newStr(4:end));
+        elseif flagOffset
+            fprintf(fid_w,'%s\r\n',tline(4:end));
+        else
+            fprintf(fid_w,'%s\r\n',tline);% 写objects前面若干行
+        end
+    end
+    fclose(fid_r);
+    fclose(fid_w);
+    delete(filename);
     clear annotation;
+    fprintf('%f%%, %s\n', i/steps*100, filename);
 end
-
