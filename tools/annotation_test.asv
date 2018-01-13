@@ -1,0 +1,51 @@
+clc
+clear
+dict = {'1_Sand', '2_Lawn', '3_Bush', '4_Land', '5_Step', '6_Mixture', '7_Ground', '8_Playground'};
+for idx = 1:size(dict,2)
+    categroy = dict{idx};
+    path = ''[]
+end
+
+%% [1] Sand
+matFile = load('H:\Data\WHU_Bottle\RAW\1_Sand\Annotations\1_Sand_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+% tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+length size(tableAnnotation)
+size(tableAnnotation.Bottle{3})
+
+%% [2] Lawn
+matFile = load('H:\Data\WHU_Bottle\RAW\2_Lawn\Annotations\2_Lawn_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+
+%% [3] Bush
+matFile = load('H:\Data\WHU_Bottle\RAW\3_Bush\Annotations\3_Bush_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+%% [4] Land
+matFile = load('H:\Data\WHU_Bottle\RAW\4_Land\Annotations\4_Land_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+% [5] Step
+matFile = load('H:\Data\WHU_Bottle\RAW\5_Step\Annotations\5_Step_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+% [6] Mixture
+matFile = load('H:\Data\WHU_Bottle\RAW\6_Mixture\Annotations\6_Mixture_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+% [7] Ground
+matFile = load('H:\Data\WHU_Bottle\RAW\7_Ground\Annotations\7_Ground_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
+% [8] Playground
+matFile = load('H:\Data\WHU_Bottle\RAW\8_Playground\Annotations\8_Playground_Cut.mat');
+tableAnnotation = matFile.imageLabel;
+tableAnnotation.Properties.VariableNames = {'imageFilename','bottle'};
+matlab_to_xml(tableAnnotation,'H:\Data\WHU_Bottle\VOC_WHU_Bottle_Cut\Annotations_Low_Case')
