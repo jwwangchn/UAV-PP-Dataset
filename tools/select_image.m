@@ -64,9 +64,9 @@ i = 1;   % 第几张图片
 global k
 k = 1;   % 存储的第几张
 global src
-src = uigetdir('H:\Data\UAV\Reed\Cut','源目录');
+src = uigetdir('H:\Data\UAV-Bottle\UAV-Bottle-V3.0.0\RAW\1_Sand\Cut','源目录');
 global dst
-dst = uigetdir('H:\Data\UAV\Reed\Cut\test','目标目录');
+dst = uigetdir('H:\Data\UAV-Bottle\UAV-Bottle-V3.0.0\RAW\test','目标目录');
 
 set(handles.text_src,'string',src,'FontSize',12);
 set(handles.text_dst,'string',dst,'FontSize',12);
