@@ -250,17 +250,25 @@ def select_image_size(annotation_path, image_path, delete_file=False):
                 os.remove(annotation_file)
 
 
-def coordinate_to_xy(left, top, right, bottom):
-    xmin = left[0]
-    xmax = right[0]
-    ymin = top[0]
-    ymax = bottom[0]
+def coordinate_to_xy(left, top, right, bottom, width = 342, height = 342):
+    xmin = min(left[0], top[0], right[0], bottom[0]) + 1
+    if xmin < 0:
+        xmin = 1
+    xmax = max(left[0], top[0], right[0], bottom[0]) - 1
+    if xmax > width:
+        xmax = width
+    ymin = min(left[1], top[1], right[1], bottom[1]) + 1
+    if ymin < 0:
+        ymin = 1
+    ymax = max(left[1], top[1], right[1], bottom[1]) - 1
+    if ymax > height:
+        ymax = height
     w = xmax - xmin
     h = ymax - ymin
     return xmin, xmax, ymin, ymax, w, h
 
 
-def write_xml(structs, image_filename, image_path, save_path):
+def write_xml(structs, image_filename, image_path, save_path, object_name = 'bottle'):
     struct = structs[0]
     doc = Document()  # 创建DOM文档对象
     annotation = doc.createElement('annotation')
@@ -324,7 +332,7 @@ def write_xml(structs, image_filename, image_path, save_path):
 
         left, top, right, bottom = rot_pts(det)
         struct_xmin, struct_xmax, struct_ymin, struct_ymax, struct_w, struct_h = coordinate_to_xy(left, top, right,
-                                                                                                  bottom)
+                                                                                                  bottom, width = struct_width, height = struct_height)
 
         object = doc.createElement('object')
         name = doc.createElement('name')
@@ -336,7 +344,8 @@ def write_xml(structs, image_filename, image_path, save_path):
         ymin = doc.createElement('ymin')
         xmax = doc.createElement('xmax')
         ymax = doc.createElement('ymax')
-        name_text = doc.createTextNode(struct['name'])
+        name_text = doc.createTextNode(object_name)
+        # print struct['name']
         pose_text = doc.createTextNode(struct['pose'])
         truncated_text = doc.createTextNode(str(struct['truncated']))
         difficult_text = doc.createTextNode(str(struct['difficult']))
@@ -372,13 +381,13 @@ def write_xml(structs, image_filename, image_path, save_path):
     f.close()
 
 
-def rbbox_to_bbox(annotation_path, image_path, save_path):
+def rbbox_to_bbox(annotation_path, image_path, save_path, object_name = 'bottle'):
     for annotation in os.listdir(annotation_path):
         annotation_file = os.path.join(annotation_path, annotation)
         structs = parse_rbbox(annotation_file)
 
         image_filename = annotation.split('.')[0] + '.jpg'
-        write_xml(structs, image_filename, image_path, save_path)
+        write_xml(structs, image_filename, image_path, save_path, object_name = 'bottle')
     print "finish convert!"
 
 
@@ -405,7 +414,18 @@ def generate_train_test_val(annotation_path, save_path, trainval_percentage=0.8,
     np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt = "%s")
     np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt = "%s")
 
+def rename_object_name_rbbox(annotation_path, object_name = 'bottle'):
+    for annotation_file in os.listdir(annotation_path):
+        annotation = os.path.join(annotation_path, annotation_file)
+        tree = ET.parse(annotation)
+        root = tree.getroot()
 
+        for object in root.findall('object'):
+            object_name_file = object.find('name')
+            if object_name_file.text != 'bottle':
+                print annotation_file, object_name_file.text
+            object_name_file.text = object_name
+        tree.write(annotation, xml_declaration=True)
 
 if __name__ == "__main__":
     # 1. 检查图像和标注文件是否匹配
@@ -435,13 +455,18 @@ if __name__ == "__main__":
     # select_image_size(annotation_path, image_path, delete_file = False)
 
     # 7. 生成最小外接矩形框的标注文件
-    # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/Annotations'
-    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/Annotations_bbox'
-    # image_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/JPEGImages'
+    # annotation_path = '/home/ubuntu/data/VOCdevkit/UAV-BD/Annotations_rbbox'
+    # save_path = '/home/ubuntu/data/VOCdevkit/UAV-BD/Annotations_bbox'
+    # image_path = '/home/ubuntu/data/VOCdevkit/UAV-BD/JPEGImages'
     #
-    # rbbox_to_bbox(annotation_path, image_path, save_path)
+    # rbbox_to_bbox(annotation_path, image_path, save_path, object_name = 'bottle')
 
     # 8. 生成 trainval train test val 文件
     # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/Annotations'
     # save_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/ImageSets/Main'
     # generate_train_test_val(annotation_path, save_path, 0.8, 0.8)
+
+    # 9. Rename object_name of rbbox
+    annotation_path = '/home/ubuntu/data/VOCdevkit/UAV-BD/Annotations_rbbox'
+    rename_object_name_rbbox(annotation_path, object_name = 'bottle')
+
