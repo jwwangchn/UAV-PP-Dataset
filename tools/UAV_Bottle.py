@@ -522,14 +522,15 @@ def create_train_data(trainval_file, image_path, save_path):
             shutil.copy(image, save_path)
             line = f.readline()
 
-def create_trainval_txt_file(train_data_path):
+def create_trainval_txt_file(train_data_path, save_path):
     lines = []
-    for image_name in os.listdir(os.path.join(train_data_path, '*.jpg')):
-        annotation_name = image_name + '.rbox'
-        print image_name, annotation_name
-        lines.append(image_name + ' ' + annotation_name)
+    for image_name in os.listdir(train_data_path):
+        if image_name.split('.')[1] == 'jpg':
+            annotation_name = image_name + '.rbox'
+            print image_name, annotation_name
+            lines.append(image_name + ' ' + annotation_name)
 
-    trainval_file = open('trainval.txt', 'w')
+    trainval_file = open(os.path.join(save_path, 'trainval.txt'), 'w')
     for line in lines:
         trainval_file.write(line)
         trainval_file.write('\n')
@@ -557,16 +558,35 @@ def DRBox_parse_rec(filename):
     return objects
 
 def create_train_annotation_files(train_data_path, annotation_path, save_path):
-    for img in os.listdir(os.path.join(train_data_path, '*.jpg')):
-        img_name = img.split(".")[0]
-        objects = DRBox_parse_rec(os.path.join(annotation_path, img_name + '.xml'))
-        save_name = img_name + '.jpg.rbox'
-        save_file = open(os.path.join(save_path, save_name), 'w')
-        for object in objects:
-            box = object['bbox']
-            save_file.write(box + '\n')
+    for img in os.listdir(train_data_path):
+        if img.split(".")[1] == 'jpg':
+            img_name = img.split(".")[0]
+            objects = DRBox_parse_rec(os.path.join(annotation_path, img_name + '.xml'))
+            save_name = img_name + '.jpg.rbox'
+            save_file = open(os.path.join(save_path, save_name), 'w')
+            for object in objects:
+                box = object['bbox']
+                save_file.write(box + '\n')
 
-
+def preview_DRBox_annotations(root_path):
+    for annotation_list in os.listdir(root_path):
+        if len(annotation_list.split('.')) == 3:
+            image_file = os.path.join(root_path, annotation_list.split('.')[0] + '.jpg')
+            im = cv2.imread(image_file)
+            with open(os.path.join(root_path, annotation_list), 'r') as f:
+                line = f.readline()
+                while line:
+                    line = line.strip("\n")
+                    line = line.split(' ')
+                    line = map(eval, line)
+                    box = np.array(line)
+                    box = np.delete(box, 4)
+                    draw_box(im, box, (0, 0, 255))
+                    line = f.readline()
+            cv2.imshow('preview', im)
+            cv2.waitKey(0)
+        else:
+            continue
 
 if __name__ == "__main__":
     # 1. 检查图像和标注文件是否匹配
@@ -612,8 +632,8 @@ if __name__ == "__main__":
     # rename_object_name_rbbox(annotation_path, object_name = 'bottle')
 
     # 10. Preview annotation file
-    # root_path = '/home/ubuntu/data/VOCdevkit/UAV-BD'
-    # image_path = '/home/ubuntu/data/VOCdevkit/UAV-BD/JPEGImages'
+    # root_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/UAV-Bottle-V3.2.0'
+    # image_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/UAV-Bottle-V3.2.0/JPEGImages'
     # preview_annotated_image(root_path, image_path, 'rbbox')
 
 
@@ -629,23 +649,31 @@ if __name__ == "__main__":
     # open_pkl(file_name)
 
     # 13. DRBox create train image data
-    # trainval_file = '/home/ubuntu/data/VOCdevkit/VOC2018/ImageSets/Main/trainval.txt'
-    # image_path = '/home/ubuntu/data/VOCdevkit/VOC2018/JPEGImages'
-    # save_path = './train_data'
+    # trainval_file = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/ImageSets/Main/trainval.txt'
+    # image_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/JPEGImages'
+    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox'
     # create_train_data(trainval_file, image_path, save_path)
 
     # 14. DRBox create trainval.txt file
-    # train_data_path = './train_data'
-    # save_path = './'
-    # create_trainval_txt_file(train_data_path)
+    # train_data_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
+    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox'
+    # create_trainval_txt_file(train_data_path, save_path)
 
 
     # 15. DRBox create annotation files
-    # train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
-    # annotation_path = '/home/ubuntu/data/VOCdevkit/VOC2018/Annotations'
-    # save_path = './annotation_data/'
-    # draw_path = './annotation_data'
+    # train_data_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
+    # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_rbbox'
+    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
+    # draw_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/annotation_data'
     # create_train_annotation_files(train_data_path, annotation_path, save_path)
+
+    # 16. Draw and test the annotation files
+    # root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/DRBox_data'
+    root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
+    preview_DRBox_annotations(root_path)
+
+
+
 
 
 
