@@ -6,7 +6,9 @@ import xml.etree.ElementTree as ET
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from xml.dom.minidom import Document
-
+import cPickle as pickle
+import matplotlib.pyplot as plt
+import shutil
 
 def parse_rbbox(filename):
     """ Parse a PASCAL VOC xml file """
@@ -405,6 +407,87 @@ def generate_train_test_val(annotation_path, save_path, trainval_percentage=0.8,
     np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt = "%s")
     np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt = "%s")
 
+def draw_PR(PR_files):
+    fig = plt.figure()
+    for algorithm, file in PR_files:
+        f = open(file)
+        info = pickle.load(f)
+        x = info['rec']
+        y = info['prec']
+        print algorithm, info['ap']
+        plt.plot(x, y, label = algorithm + ' ' + '(' + 'AP = ' + str(round(info['ap'], 3)) + ')')
+
+    plt.legend()
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    fig.savefig('PR.pdf', bbox_inches='tight')
+    plt.show()
+
+def open_pkl(file_name):
+    f = open(file_name)
+    info = pickle.load(f)
+    print info
+    # txt_file = open('sampleList.txt', 'w')
+    # for detail in info:
+    #     txt_file.write(str(detail))
+    #     txt_file.write('\n')
+    # txt_file.close()
+
+def create_train_data(trainval_file, image_path, save_path):
+    image_list = []
+    with open(trainval_file, 'r') as f:
+        line = f.readline()
+        while line:
+            line = line.strip('\n')
+            line = line + '.jpg'
+            image = os.path.join(image_path, line)
+            print image
+            shutil.copy(image, save_path)
+            line = f.readline()
+
+def create_trainval_txt_file(train_data_path):
+    lines = []
+    for image_name in os.listdir(os.path.join(train_data_path, '*.jpg')):
+        annotation_name = image_name + '.rbox'
+        print image_name, annotation_name
+        lines.append(image_name + ' ' + annotation_name)
+
+    trainval_file = open('trainval.txt', 'w')
+    for line in lines:
+        trainval_file.write(line)
+        trainval_file.write('\n')
+    trainval_file.close()
+
+def DRBox_parse_rec(filename):
+    """ Parse a PASCAL VOC xml file """
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    objects = []
+
+    for object in root.findall('object'):
+        obj_struct = {}
+        robndbox = object.find('robndbox')
+        cx = robndbox.find('cx').text
+        cy = robndbox.find('cy').text
+        w = robndbox.find('w').text
+        h = robndbox.find('h').text
+        angle = robndbox.find('angle').text
+        angle = float(angle) * 180.0 / np.pi
+        angle = 360 - angle
+        angle = str(angle)
+        obj_struct['bbox'] = cx + ' ' + cy + ' ' + h + ' ' + w + ' ' + '1' + ' ' + angle
+        objects.append(obj_struct)
+    return objects
+
+def create_train_annotation_files(train_data_path, annotation_path, save_path):
+    for img in os.listdir(os.path.join(train_data_path, '*.jpg')):
+        img_name = img.split(".")[0]
+        objects = DRBox_parse_rec(os.path.join(annotation_path, img_name + '.xml'))
+        save_name = img_name + '.jpg.rbox'
+        save_file = open(os.path.join(save_path, save_name), 'w')
+        for object in objects:
+            box = object['bbox']
+            save_file.write(box + '\n')
 
 
 if __name__ == "__main__":
@@ -445,3 +528,36 @@ if __name__ == "__main__":
     # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/Annotations'
     # save_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.1.0/ImageSets/Main'
     # generate_train_test_val(annotation_path, save_path, 0.8, 0.8)
+
+    # 9. Draw P-R curve
+    # SSD_file = ('SSD', 'E:/jwwangchn/ICIP/SSD/bottle_pr.pkl')
+    # FasterRCNN_file = ('Faster R-CNN', 'E:/jwwangchn/ICIP/FasterRCNN/bottle_pr.pkl')
+    # PR_files = [SSD_file, FasterRCNN_file]
+    # draw_PR(PR_files)
+
+    # 10. Open pkl file
+    # file_name = 'E:/jwwangchn/坚果云/文档/ubuntu/ICIP/prior_boxes.pkl'
+    # file_name = unicode(file_name, 'utf8')
+    # open_pkl(file_name)
+
+    # 11. DRBox create train image data
+    # trainval_file = '/home/ubuntu/data/VOCdevkit/VOC2018/ImageSets/Main/trainval.txt'
+    # image_path = '/home/ubuntu/data/VOCdevkit/VOC2018/JPEGImages'
+    # save_path = './train_data'
+    # create_train_data(trainval_file, image_path, save_path)
+
+    # 12. DRBox create trainval.txt file
+    # train_data_path = './train_data'
+    # save_path = './'
+    # create_trainval_txt_file(train_data_path)
+
+
+    # 13. DRBox create annotation files
+    # train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
+    # annotation_path = '/home/ubuntu/data/VOCdevkit/VOC2018/Annotations'
+    # save_path = './annotation_data/'
+    # draw_path = './annotation_data'
+    # create_train_annotation_files(train_data_path, annotation_path, save_path)
+
+
+
