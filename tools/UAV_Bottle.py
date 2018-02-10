@@ -649,27 +649,26 @@ if __name__ == "__main__":
     # open_pkl(file_name)
 
     # 13. DRBox create train image data
-    # trainval_file = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/ImageSets/Main/trainval.txt'
-    # image_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/JPEGImages'
-    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox'
+    # trainval_file = '~/data/VOCdevkit/UAV-Bottle-V3.2.0/ImageSets/Main/trainval.txt'
+    # image_path = '~/data/VOCdevkit/UAV-Bottle-V3.2.0/JPEGImages'
+    # save_path = '~/Documents/DRBox/data/bottle/train_data'
     # create_train_data(trainval_file, image_path, save_path)
 
     # 14. DRBox create trainval.txt file
-    # train_data_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
-    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox'
+    # train_data_path = '~/Documents/DRBox/data/bottle/train_data'
+    # save_path = '~/Documents/DRBox/data/bottle'
     # create_trainval_txt_file(train_data_path, save_path)
 
 
     # 15. DRBox create annotation files
-    # train_data_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
-    # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_rbbox'
-    # save_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
-    # draw_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/annotation_data'
+    # train_data_path = '~/Documents/DRBox/data/bottle/train_data'
+    # annotation_path = '~/data/VOCdevkit/UAV-Bottle-V3.2.0/Annotations_rbbox'
+    # save_path = '~/Documents/DRBox/data/bottle/train_data'
     # create_train_annotation_files(train_data_path, annotation_path, save_path)
 
     # 16. Draw and test the annotation files
     # root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/DRBox_data'
-    root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/train_data'
+    root_path = '~/Documents/DRBox/data/bottle/train_data'
     preview_DRBox_annotations(root_path)
 
 
