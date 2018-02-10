@@ -588,6 +588,23 @@ def preview_DRBox_annotations(root_path):
         else:
             continue
 
+
+def num_object_imageset(imagesets_path, annotation_path):
+    imagesets_dict = {'trainval':0, 'train': 0, 'test': 0, 'val': 0}
+
+    for file_name in os.listdir(imagesets_path):
+        imagesets_name = file_name.split('.')[0]
+        with open(os.path.join(imagesets_path, file_name), 'r') as f:
+            line = f.readline()
+            while line:
+                line = line.strip('\n')
+                line = line + '.xml'
+                annotation = os.path.join(annotation_path, line)
+                objects = parse_bbox(annotation)
+                imagesets_dict[imagesets_name] += len(objects)
+                line = f.readline()
+    return imagesets_dict
+
 if __name__ == "__main__":
     # 1. 检查图像和标注文件是否匹配
     # check_image_annotations(delete_files=False)
@@ -640,7 +657,8 @@ if __name__ == "__main__":
     # 11. Draw P-R curve
     # SSD_file = ('SSD', 'E:/jwwangchn/ICIP/SSD/bottle_pr.pkl')
     # FasterRCNN_file = ('Faster R-CNN', 'E:/jwwangchn/ICIP/FasterRCNN/bottle_pr.pkl')
-    # PR_files = [SSD_file, FasterRCNN_file]
+    # RRPN_file = ('RRPN', 'E:/jwwangchn/ICIP/RRPN/bottle_pr.pkl')
+    # PR_files = [SSD_file, FasterRCNN_file, RRPN_file]
     # draw_PR(PR_files)
 
     # 12. Open pkl file
@@ -668,8 +686,15 @@ if __name__ == "__main__":
 
     # 16. Draw and test the annotation files
     # root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/DRBox_data'
-    root_path = '~/Documents/DRBox/data/bottle/train_data'
-    preview_DRBox_annotations(root_path)
+    # root_path = '~/Documents/DRBox/data/bottle/train_data'
+    # preview_DRBox_annotations(root_path)
+
+    # 17. Calculate the instance number of train and test data
+    imagesets_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/ImageSets/Main'
+    annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_bbox'
+    imagesets_dict = num_object_imageset(imagesets_path, annotation_path)
+    print imagesets_dict
+    print "Number of imagesets: ", sum(imagesets_dict.values())
 
 
 
