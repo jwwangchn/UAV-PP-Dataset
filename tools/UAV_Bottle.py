@@ -400,10 +400,10 @@ def generate_train_test_val(annotation_path, save_path, trainval_percentage=0.8,
     val_list = all_annotation[train_num - 1 : trainval_num - 1]
     test_list = all_annotation[trainval_num -  1 : annotation_num]
 
-    np.savetxt(os.path.join(save_path, 'trainval.txt'), trainval_list, fmt = "%s")
-    np.savetxt(os.path.join(save_path, 'train.txt'), train_list, fmt = "%s")
-    np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt = "%s")
-    np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt = "%s")
+    np.savetxt(os.path.join(save_path, 'trainval.txt'), trainval_list, fmt = "%s\n")
+    np.savetxt(os.path.join(save_path, 'train.txt'), train_list, fmt = "%s\n")
+    np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt = "%s\n")
+    np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt = "%s\n")
 
 
 
