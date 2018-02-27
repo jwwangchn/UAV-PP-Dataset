@@ -10,6 +10,7 @@ import cPickle as pickle
 import matplotlib.pyplot as plt
 import shutil
 
+
 def parse_rbbox(filename):
     """ Parse a PASCAL VOC xml file """
     tree = ET.parse(filename)
@@ -252,7 +253,7 @@ def select_image_size(annotation_path, image_path, delete_file=False):
                 os.remove(annotation_file)
 
 
-def coordinate_to_xy(left, top, right, bottom, width = 342, height = 342):
+def coordinate_to_xy(left, top, right, bottom, width=342, height=342):
     xmin = min(left[0], top[0], right[0], bottom[0]) + 1
     if xmin < 0:
         xmin = 1
@@ -270,7 +271,7 @@ def coordinate_to_xy(left, top, right, bottom, width = 342, height = 342):
     return xmin, xmax, ymin, ymax, w, h
 
 
-def write_xml(structs, image_filename, image_path, save_path, object_name = 'bottle'):
+def write_xml(structs, image_filename, image_path, save_path, object_name='bottle'):
     struct = structs[0]
     doc = Document()  # 创建DOM文档对象
     annotation = doc.createElement('annotation')
@@ -334,7 +335,9 @@ def write_xml(structs, image_filename, image_path, save_path, object_name = 'bot
 
         left, top, right, bottom = rot_pts(det)
         struct_xmin, struct_xmax, struct_ymin, struct_ymax, struct_w, struct_h = coordinate_to_xy(left, top, right,
-                                                                                                  bottom, width = struct_width, height = struct_height)
+                                                                                                  bottom,
+                                                                                                  width=struct_width,
+                                                                                                  height=struct_height)
 
         object = doc.createElement('object')
         name = doc.createElement('name')
@@ -383,13 +386,13 @@ def write_xml(structs, image_filename, image_path, save_path, object_name = 'bot
     f.close()
 
 
-def rbbox_to_bbox(annotation_path, image_path, save_path, object_name = 'bottle'):
+def rbbox_to_bbox(annotation_path, image_path, save_path, object_name='bottle'):
     for annotation in os.listdir(annotation_path):
         annotation_file = os.path.join(annotation_path, annotation)
         structs = parse_rbbox(annotation_file)
 
         image_filename = annotation.split('.')[0] + '.jpg'
-        write_xml(structs, image_filename, image_path, save_path, object_name = 'bottle')
+        write_xml(structs, image_filename, image_path, save_path, object_name='bottle')
     print "finish convert!"
 
 
@@ -406,17 +409,18 @@ def generate_train_test_val(annotation_path, save_path, trainval_percentage=0.8,
     val_num = trainval_num - train_num
     test_num = annotation_num - trainval_num
 
-    trainval_list = all_annotation[0 : trainval_num - 1]
-    train_list = all_annotation[0 : train_num - 1]
-    val_list = all_annotation[train_num - 1 : trainval_num - 1]
-    test_list = all_annotation[trainval_num -  1 : annotation_num]
+    trainval_list = all_annotation[0: trainval_num - 1]
+    train_list = all_annotation[0: train_num - 1]
+    val_list = all_annotation[train_num - 1: trainval_num - 1]
+    test_list = all_annotation[trainval_num - 1: annotation_num]
 
-    np.savetxt(os.path.join(save_path, 'trainval.txt'), trainval_list, fmt = "%s\n")
-    np.savetxt(os.path.join(save_path, 'train.txt'), train_list, fmt = "%s\n")
-    np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt = "%s\n")
-    np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt = "%s\n")
+    np.savetxt(os.path.join(save_path, 'trainval.txt'), trainval_list, fmt="%s\n")
+    np.savetxt(os.path.join(save_path, 'train.txt'), train_list, fmt="%s\n")
+    np.savetxt(os.path.join(save_path, 'val.txt'), val_list, fmt="%s\n")
+    np.savetxt(os.path.join(save_path, 'test.txt'), test_list, fmt="%s\n")
 
-def rename_object_name_rbbox(annotation_path, object_name = 'bottle'):
+
+def rename_object_name_rbbox(annotation_path, object_name='bottle'):
     for annotation_file in os.listdir(annotation_path):
         annotation = os.path.join(annotation_path, annotation_file)
         tree = ET.parse(annotation)
@@ -428,6 +432,7 @@ def rename_object_name_rbbox(annotation_path, object_name = 'bottle'):
                 print annotation_file, object_name_file.text
             object_name_file.text = object_name
         tree.write(annotation, xml_declaration=True)
+
 
 def draw_box(im, BBox, color):
     cx, cy, h, w, angle = BBox[0:5]
@@ -460,7 +465,8 @@ def draw_box(im, BBox, color):
              (int(rotated_pts[0, 0]), int(rotated_pts[0, 1])), color, 5)
     return im
 
-def preview_annotated_image(root_path, image_path, bbox = 'bbox'):
+
+def preview_annotated_image(root_path, image_path, bbox='bbox'):
     if bbox == 'bbox':
         annotation_path = os.path.join(root_path, 'Annotations_bbox')
     if bbox == 'rbbox':
@@ -484,7 +490,8 @@ def preview_annotated_image(root_path, image_path, bbox = 'bbox'):
         cv2.imshow('preview', img)
         cv2.waitKey(0)
 
-def draw_PR(PR_files):
+
+def draw_PR(PR_files, file_name):
     fig = plt.figure()
     for algorithm, file in PR_files:
         f = open(file)
@@ -492,13 +499,14 @@ def draw_PR(PR_files):
         x = info['rec']
         y = info['prec']
         print algorithm, info['ap']
-        plt.plot(x, y, label = algorithm + ' ' + '(' + 'AP = ' + str(round(info['ap'], 3)) + ')')
+        plt.plot(x, y, label=algorithm + ' ' + '(' + 'AP = ' + str(round(info['ap'], 3)) + ')')
 
     plt.legend()
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    fig.savefig('PR.pdf', bbox_inches='tight')
+    fig.savefig(file_name, bbox_inches='tight')
     plt.show()
+
 
 def open_pkl(file_name):
     f = open(file_name)
@@ -509,6 +517,7 @@ def open_pkl(file_name):
     #     txt_file.write(str(detail))
     #     txt_file.write('\n')
     # txt_file.close()
+
 
 def create_train_data(trainval_file, image_path, save_path):
     image_list = []
@@ -521,6 +530,7 @@ def create_train_data(trainval_file, image_path, save_path):
             print image
             shutil.copy(image, save_path)
             line = f.readline()
+
 
 def create_trainval_txt_file(train_data_path, save_path):
     lines = []
@@ -535,6 +545,7 @@ def create_trainval_txt_file(train_data_path, save_path):
         trainval_file.write(line)
         trainval_file.write('\n')
     trainval_file.close()
+
 
 def DRBox_parse_rec(filename):
     """ Parse a PASCAL VOC xml file """
@@ -557,6 +568,7 @@ def DRBox_parse_rec(filename):
         objects.append(obj_struct)
     return objects
 
+
 def create_train_annotation_files(train_data_path, annotation_path, save_path):
     for img in os.listdir(train_data_path):
         if img.split(".")[1] == 'jpg':
@@ -567,6 +579,7 @@ def create_train_annotation_files(train_data_path, annotation_path, save_path):
             for object in objects:
                 box = object['bbox']
                 save_file.write(box + '\n')
+
 
 def preview_DRBox_annotations(root_path):
     for annotation_list in os.listdir(root_path):
@@ -590,7 +603,7 @@ def preview_DRBox_annotations(root_path):
 
 
 def num_object_imageset(imagesets_path, annotation_path):
-    imagesets_dict = {'trainval':0, 'train': 0, 'test': 0, 'val': 0}
+    imagesets_dict = {'trainval': 0, 'train': 0, 'test': 0, 'val': 0}
 
     for file_name in os.listdir(imagesets_path):
         imagesets_name = file_name.split('.')[0]
@@ -604,6 +617,370 @@ def num_object_imageset(imagesets_path, annotation_path):
                 imagesets_dict[imagesets_name] += len(objects)
                 line = f.readline()
     return imagesets_dict
+
+
+def coordinate_to_xy_no_boundary(left, top, right, bottom):
+    xmin = min(left[0], top[0], right[0], bottom[0]) + 1
+    xmax = max(left[0], top[0], right[0], bottom[0]) - 1
+    ymin = min(left[1], top[1], right[1], bottom[1]) + 1
+    ymax = max(left[1], top[1], right[1], bottom[1]) - 1
+    return xmin, ymin, xmax, ymax
+
+
+def rot_pts_no_order(det):
+    cx, cy, h, w, angle = det[0:5]
+    lt = [cx - w / 2, cy - h / 2, 1]
+    rt = [cx + w / 2, cy - h / 2, 1]
+    lb = [cx - w / 2, cy + h / 2, 1]
+    rb = [cx + w / 2, cy + h / 2, 1]
+
+    pts = []
+
+    # angle = angle * 0.45
+
+    pts.append(lt)
+    pts.append(rt)
+    pts.append(rb)
+    pts.append(lb)
+
+    angle = -angle
+
+    # if angle != 0:
+    cos_cita = np.cos(np.pi / 180 * angle)
+    sin_cita = np.sin(np.pi / 180 * angle)
+
+    # else :
+    #	cos_cita = 1
+    #	sin_cita = 0
+
+    M0 = np.array([[1, 0, 0], [0, 1, 0], [-cx, -cy, 1]])
+    M1 = np.array([[cos_cita, sin_cita, 0], [-sin_cita, cos_cita, 0], [0, 0, 1]])
+    M2 = np.array([[1, 0, 0], [0, 1, 0], [cx, cy, 1]])
+    rotation_matrix = M0.dot(M1).dot(M2)
+
+    rotated_pts = np.dot(np.array(pts), rotation_matrix)
+
+    lt = np.argmin(rotated_pts, axis=0)
+    rb = np.argmax(rotated_pts, axis=0)
+
+    left = rotated_pts[0]
+    top = rotated_pts[1]
+    right = rotated_pts[2]
+    bottom = rotated_pts[3]
+
+    return left, top, right, bottom
+
+
+# def xy_rotation(left, top, right, bottom, det):
+#     cx, cy, h, w, angle = det
+#     angle = angle * np.pi / 180.0
+#     # angle 是弧度制
+#     R = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+#     R = np.mat(R)
+#     R_I = R.I
+#
+#     # print left, top, right, bottom
+#     print left
+#     print top
+#     print right
+#     print bottom
+#     left = R_I * np.mat(np.array([left[0] - cx, left[1] - cy]).reshape((2,1))) + np.mat(np.array([cx, cy])).reshape((2,1))
+#     top = R_I * np.mat(np.array([top[0] - cx, top[1] - cy]).reshape((2, 1))) + np.mat(np.array([cx, cy])).reshape((2, 1))
+#     right = R_I * np.mat(np.array([right[0] - cx, right[1] - cy]).reshape((2, 1))) + np.mat(np.array([cx, cy])).reshape((2, 1))
+#     bottom = R_I * np.mat(np.array([bottom[0] - cx, bottom[1] - cy]).reshape((2, 1))) + np.mat(np.array([cx, cy])).reshape((2, 1))
+#     print left
+#     print top
+#     print right
+#     print bottom
+#     return left, top, right, bottom
+
+def xy_rotation(det):
+    det = np.squeeze(det)
+    cx, cy, h, w, angle = det[0:5]
+    left = [cx - w / 2, cy - h / 2]
+    top = [cx + w / 2, cy - h / 2]
+    right = [cx - w / 2, cy + h / 2]
+    bottom = [cx + w / 2, cy + h / 2]
+
+    xmin = min(left[0], top[0], right[0], bottom[0]) + 1
+    xmax = max(left[0], top[0], right[0], bottom[0]) - 1
+    ymin = min(left[1], top[1], right[1], bottom[1]) + 1
+    ymax = max(left[1], top[1], right[1], bottom[1]) - 1
+
+    return [xmin, ymin, xmax, ymax]
+
+
+def bbox_overlaps(bb, BBGT):
+    ixmin = np.maximum(BBGT[:, 0], bb[0])
+    iymin = np.maximum(BBGT[:, 1], bb[1])
+    ixmax = np.minimum(BBGT[:, 2], bb[2])
+    iymax = np.minimum(BBGT[:, 3], bb[3])
+    iw = np.maximum(ixmax - ixmin + 1., 0.)
+    ih = np.maximum(iymax - iymin + 1., 0.)
+    inters = iw * ih
+
+    # union
+    uni = ((bb[2] - bb[0] + 1.) * (bb[3] - bb[1] + 1.) +
+           (BBGT[:, 2] - BBGT[:, 0] + 1.) *
+           (BBGT[:, 3] - BBGT[:, 1] + 1.) - inters)
+
+    overlaps = inters / uni
+    return overlaps
+
+
+def attenuation_coefficient(bb, BBGT):
+    angle_bb = bb[:, -1]
+    angle_BBGT = BBGT[:, -1]
+    angle = angle_BBGT - angle_bb
+    return np.abs(np.cos(angle / 180 * np.pi))
+
+
+def ArIoU(bb, BBGT):
+    # 输入的 bb 为一个 rbbox, BBGT 为若干 rbbox
+    # 0. 计算 “面积衰减系数”
+    coefficient = attenuation_coefficient(bb, BBGT)
+
+    # 1. 将 bb 转换成 (xmin, ymin, xmax, ymax)
+    det = bb[:, 0:5]
+    bb = xy_rotation(det)
+
+    # 2. 将 BBGT 转换成若干(xmin, ymin, xmax, ymax)
+    _BBGT_ = []  # 临时变量
+    for idx in range(BBGT.shape[0]):
+        det = BBGT[idx, :]
+        _BBGT = xy_rotation(det)
+        _BBGT_.append(_BBGT)
+
+    BBGT = np.array(_BBGT_)
+
+    # 3. 计算 bbox 的重叠面积
+    overlaps = bbox_overlaps(bb, BBGT)
+
+    # 4. 计算衰减后的面积
+    overlaps = overlaps * coefficient
+    return overlaps
+
+
+def parse_bbox_UAV_PP(filename):
+    """ Parse a PASCAL VOC xml file """
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    objects = []
+
+    for object in root.findall('object'):
+        obj_struct = {}
+        obj_struct['name'] = object.find('name').text
+        obj_struct['pose'] = object.find('pose').text
+        obj_struct['truncated'] = int(object.find('truncated').text)
+        obj_struct['difficult'] = int(object.find('difficult').text)
+        bndbox = object.find('bndbox')
+        xmin = bndbox.find('xmin').text
+        ymin = bndbox.find('ymin').text
+        xmax = bndbox.find('xmax').text
+        ymax = bndbox.find('ymax').text
+
+        obj_struct['bbox'] = xmin + ' ' + ymin + ' ' + xmax + ' ' + ymax + ' '
+        objects.append(obj_struct)
+    return objects
+
+
+def create_train_annotation_files_normal(annotation_path, save_path):
+    save_name = 'UAV_PP_Annotation.txt'
+    save_file = open(os.path.join(save_path, save_name), 'w')
+    k = 0
+    for anno_file in os.listdir(annotation_path):
+        objects = parse_bbox_UAV_PP(os.path.join(annotation_path, anno_file))
+        image_name = anno_file.split('.')[0] + '.jpg'
+        write_detail = 'image_name'
+        object_num = 0
+        box = ' '
+        for object in objects:
+            box += object['bbox']
+            object_num += 1
+        save_file.write(image_name + ' ' + str(object_num) + box + '\n')
+
+def xy_rotation_direct(det, width, height):
+    det = np.squeeze(det)
+    cx, cy, h, w, angle = det[0:5]
+    left = [cx - w / 2, cy - h / 2]
+    top = [cx + w / 2, cy - h / 2]
+    right = [cx - w / 2, cy + h / 2]
+    bottom = [cx + w / 2, cy + h / 2]
+
+    xmin = min(left[0], top[0], right[0], bottom[0]) + 1
+    if xmin < 0:
+        xmin = 1
+
+    xmax = max(left[0], top[0], right[0], bottom[0]) - 1
+    if xmax > width:
+        xmax = width
+
+    ymin = min(left[1], top[1], right[1], bottom[1]) + 1
+    if ymin < 0:
+        ymin = 1
+
+    ymax = max(left[1], top[1], right[1], bottom[1]) - 1
+    if ymax > height:
+        ymax = height
+
+    return [xmin, ymin, xmax, ymax]
+
+
+def write_xml_direct(structs, image_filename, image_path, save_path, object_name='bottle'):
+    struct = structs[0]
+    doc = Document()  # 创建DOM文档对象
+    annotation = doc.createElement('annotation')
+    annotation.setAttribute('verified', "no")
+    doc.appendChild(annotation)
+
+    # folder
+    folder = doc.createElement('folder')
+    folder_text = doc.createTextNode('JPEGImages')
+    annotation.appendChild(folder)
+    folder.appendChild(folder_text)
+
+    # filename
+    filename = doc.createElement('filename')
+    filename_text = doc.createTextNode(image_filename)
+    annotation.appendChild(filename)
+    filename.appendChild(filename_text)
+
+    # path
+    path = doc.createElement('path')
+    path_text = doc.createTextNode(image_path)
+    annotation.appendChild(path)
+    path.appendChild(path_text)
+
+    # source
+    source = doc.createElement('source')
+    database = doc.createElement('database')
+    database_text = doc.createTextNode('UAV-BD')
+    annotation.appendChild(source)
+    source.appendChild(database)
+    database.appendChild(database_text)
+
+    # size
+    size = doc.createElement('size')
+    width = doc.createElement('width')
+    height = doc.createElement('height')
+    depth = doc.createElement('depth')
+
+    [struct_width, struct_height, struct_depth] = struct['size']
+    width_text = doc.createTextNode(str(struct_width))
+    height_text = doc.createTextNode(str(struct_height))
+    depth_text = doc.createTextNode(str(struct_depth))
+
+    annotation.appendChild(size)
+    size.appendChild(width)
+    size.appendChild(height)
+    size.appendChild(depth)
+    width.appendChild(width_text)
+    height.appendChild(height_text)
+    depth.appendChild(depth_text)
+
+    # segmented
+    segmented = doc.createElement('segmented')
+    segmented_text = doc.createTextNode('0')
+    annotation.appendChild(segmented)
+    segmented.appendChild(segmented_text)
+
+    # object
+    for struct in structs:
+        det = struct['bbox']
+        struct_xmin, struct_ymin, struct_xmax, struct_ymax = xy_rotation_direct(det, struct_width, struct_height)
+        # left, top, right, bottom = rot_pts(det)
+        # struct_xmin, struct_xmax, struct_ymin, struct_ymax, struct_w, struct_h = coordinate_to_xy(left, top, right, bottom, width=struct_width, height=struct_height)
+
+        object = doc.createElement('object')
+        name = doc.createElement('name')
+        pose = doc.createElement('pose')
+        truncated = doc.createElement('truncated')
+        difficult = doc.createElement('difficult')
+        bndbox = doc.createElement('bndbox')
+        xmin = doc.createElement('xmin')
+        ymin = doc.createElement('ymin')
+        xmax = doc.createElement('xmax')
+        ymax = doc.createElement('ymax')
+        name_text = doc.createTextNode(object_name)
+        # print struct['name']
+        pose_text = doc.createTextNode(struct['pose'])
+        truncated_text = doc.createTextNode(str(struct['truncated']))
+        difficult_text = doc.createTextNode(str(struct['difficult']))
+        bndbox_text = doc.createTextNode('bndbox')
+        xmin_text = doc.createTextNode(str(int(struct_xmin)))
+        ymin_text = doc.createTextNode(str(int(struct_ymin)))
+        xmax_text = doc.createTextNode(str(int(struct_xmax)))
+        ymax_text = doc.createTextNode(str(int(struct_ymax)))
+        annotation.appendChild(object)
+        object.appendChild(name)
+        object.appendChild(pose)
+        object.appendChild(truncated)
+        object.appendChild(difficult)
+        object.appendChild(bndbox)
+        bndbox.appendChild(xmin)
+        bndbox.appendChild(ymin)
+        bndbox.appendChild(xmax)
+        bndbox.appendChild(ymax)
+
+        name.appendChild(name_text)
+        pose.appendChild(pose_text)
+        truncated.appendChild(truncated_text)
+        difficult.appendChild(difficult_text)
+        xmin.appendChild(xmin_text)
+        ymin.appendChild(ymin_text)
+        xmax.appendChild(xmax_text)
+        ymax.appendChild(ymax_text)
+
+    save_file = os.path.join(save_path, image_filename.split('.')[0] + '.xml')
+    print save_file
+    f = open(save_file, 'w')
+    doc.writexml(f, indent='\t', newl='\n', addindent='\t', encoding='utf-8')
+    f.close()
+
+
+def rbbox_to_bbox_direct(annotation_path, image_path, save_path, object_name='bottle'):
+    for annotation in os.listdir(annotation_path):
+        annotation_file = os.path.join(annotation_path, annotation)
+        structs = parse_rbbox(annotation_file)
+
+        image_filename = annotation.split('.')[0] + '.jpg'
+        write_xml_direct(structs, image_filename, image_path, save_path, object_name='bottle')
+    print "finish convert!"
+
+def xy_to_theta(BB):
+    cx = (BB[:,0] + BB[:,2])/2
+    cy = (BB[:,1] + BB[:,3])/2
+    h = BB[:,3] - BB[:,1]
+    w = BB[:,2] - BB[:,0]
+    angle = np.zeros((cx.shape))
+    return np.column_stack((cx.reshape(-1,1), cy.reshape(-1,1), h.reshape(-1,1), w.reshape(-1,1), angle.reshape(-1,1)))
+
+import codecs
+
+def xy_to_theta_result(result_file, save_path):
+    # save_file = codecs.open(os.path.join(save_path, 'convert.txt'), 'w', encoding='utf-8')
+    save_file = open(os.path.join(save_path, 'convert.txt'), 'w')
+    with open(result_file, 'r') as f:
+        lines = f.readlines()
+
+    splitlines = [x.strip().split(' ') for x in lines]
+    image_ids = [x[0] for x in splitlines]
+    confidence = np.array([float(x[1]) for x in splitlines])
+    BB = np.array([[float(z) for z in x[2:]] for x in splitlines])
+    BB = xy_to_theta(BB)
+    all = np.column_stack((np.array(image_ids).reshape(-1,1), np.array(confidence).reshape(-1, 1), BB))
+    print all
+    for i in range(all.shape[0]):
+        detail = ''
+        for j in range(all.shape[1]):
+            detail = detail + all[i,j] + ' '
+        detail.strip()
+        print detail
+        save_file.write(detail + '\n')
+
+    # np.savetxt(os.path.join(save_path, 'convert.txt'), all)
+    # save_file.write(all)
+    # save_file.close()
 
 if __name__ == "__main__":
     # 1. 检查图像和标注文件是否匹配
@@ -654,12 +1031,23 @@ if __name__ == "__main__":
     # preview_annotated_image(root_path, image_path, 'rbbox')
 
 
-    # 11. Draw P-R curve
-    # SSD_file = ('SSD', 'E:/jwwangchn/ICIP/SSD/bottle_pr.pkl')
-    # FasterRCNN_file = ('Faster R-CNN', 'E:/jwwangchn/ICIP/FasterRCNN/bottle_pr.pkl')
-    # RRPN_file = ('RRPN', 'E:/jwwangchn/ICIP/RRPN/bottle_pr.pkl')
-    # PR_files = [SSD_file, FasterRCNN_file, RRPN_file]
-    # draw_PR(PR_files)
+    #11. Draw P-R curve
+    # rbbox
+    SSD_file = ('SSD', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/ssd_bottle_pr_rbbox.pkl')
+    FasterRCNN_file = ('Faster R-CNN', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/faster_rcnn_bottle_pr_rbbox.pkl')
+    RRPN_file = ('RRPN', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/rrpn_bottle_pr_rbbox.pkl')
+    YOLOv2_file = ('YOLOv2', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/yolov2_bottle_pr_rbbox.pkl')
+    DRBox_file = ('DRBox', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/drbox_bottle_pr_rbbox.pkl')
+
+    PR_files = [RRPN_file, SSD_file, FasterRCNN_file, YOLOv2_file, DRBox_file]
+    draw_PR(PR_files, 'pr_rbbox.pdf')
+
+    # bbox
+    SSD_file = ('SSD', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/ssd_bottle_pr_bbox.pkl')
+    FasterRCNN_file = ('Faster R-CNN', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/faster_rcnn_bottle_pr_bbox.pkl')
+    YOLOv2_file = ('YOLOv2', '//90.0.0.50/Documents/jwwangchn/ICIP/pr/yolov2_bottle_pr_bbox.pkl')
+    PR_files = [FasterRCNN_file, SSD_file, YOLOv2_file]
+    draw_PR(PR_files, 'pr_bbox.pdf')
 
     # 12. Open pkl file
     # file_name = 'E:/jwwangchn/坚果云/文档/ubuntu/ICIP/prior_boxes.pkl'
@@ -673,16 +1061,16 @@ if __name__ == "__main__":
     # create_train_data(trainval_file, image_path, save_path)
 
     # 14. DRBox create trainval.txt file
-    #train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
-    #save_path = '/home/ubuntu/Documents/DRBox/data/bottle'
-    #create_trainval_txt_file(train_data_path, save_path)
+    # train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
+    # save_path = '/home/ubuntu/Documents/DRBox/data/bottle'
+    # create_trainval_txt_file(train_data_path, save_path)
 
 
     # 15. DRBox create annotation files
-    #train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
-    #annotation_path = '/home/ubuntu/data/VOCdevkit/UAV-Bottle-V3.2.0/Annotations_rbbox'
-    #save_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
-    #create_train_annotation_files(train_data_path, annotation_path, save_path)
+    # train_data_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
+    # annotation_path = '/home/ubuntu/data/VOCdevkit/UAV-Bottle-V3.2.0/Annotations_rbbox'
+    # save_path = '/home/ubuntu/Documents/DRBox/data/bottle/train_data'
+    # create_train_annotation_files(train_data_path, annotation_path, save_path)
 
     # 16. Draw and test the annotation files
     # root_path = 'E:/jwwangchn/Data/UAV-Bottle/DRBox/DRBox_data'
@@ -691,19 +1079,34 @@ if __name__ == "__main__":
     # preview_DRBox_annotations(root_path)
 
     # 17. Calculate the instance number of train and test data
-    imagesets_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/ImageSets/Main'
-    annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_bbox'
-    imagesets_dict = num_object_imageset(imagesets_path, annotation_path)
-    print imagesets_dict
-    print "Number of imagesets: ", sum(imagesets_dict.values())
+    # imagesets_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/ImageSets/Main'
+    # annotation_path = 'E:/jwwangchn/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_bbox'
+    # imagesets_dict = num_object_imageset(imagesets_path, annotation_path)
+    # print imagesets_dict
+    # print "Number of imagesets: ", sum(imagesets_dict.values())
 
+    # 18. 计算 ArIoU
+    # bb = np.array([[100.0, 100.0, 10.0, 100.0, 0]])  # keep
+    #
+    # BBGT = np.array([[100.0, 100.0, 10.0, 100.0, 30],
+    #                  [100.0, 100.0, 10.0, 100.0, 45],
+    #                  [100.0, 100.0, 10.0, 100.0, 60],
+    #                  [100.0, 100.0, 10.0, 100.0, 90]])
+    # ArIoU(bb, BBGT)
 
+    # 19. UAV-PP Dataset 传统算法转换
+    # annotation_path = 'H:/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_bbox'
+    # save_path = 'H:/Data/UAV-Bottle/UAV-Bottle-V3.2.0/test'
+    # create_train_annotation_files_normal(annotation_path, save_path)
 
+    # 20. 不考虑角度直接生成标注文件
+    # annotation_path = 'H:/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_rbbox'
+    # save_path = 'H:/Data/UAV-Bottle/UAV-Bottle-V3.2.0/Annotations_bbox_direct'
+    # image_path = 'H:/Data/UAV-Bottle/UAV-Bottle-V3.2.0/JPEGImages'
+    #
+    # rbbox_to_bbox_direct(annotation_path, image_path, save_path, object_name='bottle')
 
-
-
-
-
-
-
-
+    # 21. 检测结果转换
+    # result_file = 'E:/result_yolo.txt'
+    # save_path = 'E:/'
+    # xy_to_theta_result(result_file, save_path)
